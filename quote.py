@@ -1,5 +1,4 @@
 import os
-import logging
 import json
 import boto3
 import uuid
@@ -7,9 +6,6 @@ import datetime
 
 from botocore.exceptions import ClientError
 from boto3.dynamodb.conditions import Key, Attr
-
-logger = logging.getLogger()
-logger.setLevel(logging.INFO)
 
 if os.getenv("AWS_SAM_LOCAL"):
     dynamodb = boto3.resource('dynamodb',endpoint_url = "http://localhost:8000")
@@ -32,7 +28,7 @@ def handler(event, context):
                     KeyConditionExpression = Key('id').eq(event['pathParameters']['quoteId'])
                 )
             except ClientError as e:
-                logger.error("Failed to retrieve quote #{}: {}".format(quoteId, e))
+                print("Failed to retrieve quote #{}: {}".format(quoteId, e))
                 return {'statusCode': 500,
                         'body': 'Error querying database' }
                 
@@ -48,16 +44,19 @@ def handler(event, context):
             }
             
             try:
-                resp = quotestable.put_item(
+                quotestable.put_item(
                     Item = item
                 )
             except ClientError as e:
-                logger.error("Failed to store quote: {}".format(json.dumps(e.response['Error'])))
+                print("Failed to store quote: {}".format(json.dumps(e.response['Error'])))
                 return {'statusCode': 500,
-                        'body': 'Error storing quote.  Please try again.')}
+                        'body': 'Error storing quote.  Please try again.'}
             
             return {
-                'body': "Created new quote #{} at {}".format(item['id'], item['date'])
+                'body': {
+                    'quoteId' : item['id'],
+                    'createdAt': item['date']
+                }
             }
     else:
         return {
