@@ -9,6 +9,7 @@ Parameters:
     Description: CodeStar projectId used to associate new resources to team members
 
 Resources:
+
   QuotesTable:
     Type: AWS::DynamoDB::Table
     Properties:
@@ -55,6 +56,10 @@ Resources:
     Properties:
       Handler: quote.handler
       Runtime: python2.7
+      Environment:
+        Variables:
+          TABLE_NAME:
+            Ref: QuotesTable
       Role:
         Fn::ImportValue:
           !Join ['-', [!Ref 'ProjectId', !Ref 'AWS::Region', 'LambdaTrustRole']]
