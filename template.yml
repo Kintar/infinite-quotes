@@ -69,5 +69,9 @@ Resources:
           Properties:
             Path: /quote/{quoteId}
             Method: get
-  
+        GetEvent:
+          Type: Api
+          Properties:
+            Path: /quote
+            Method: get
   
