@@ -1,9 +1,15 @@
 import os
+import logging
 import json
 import boto3
-from botocore.exceptions import ClientError
 import uuid
 import datetime
+
+from botocore.exceptions import ClientError
+from boto3.dynamodb.conditions import Key, Attr
+
+logger = logging.getLogger()
+logger.setLevel(logging.INFO)
 
 if os.getenv("AWS_SAM_LOCAL"):
     dynamodb = boto3.resource('dynamodb',endpoint_url = "http://localhost:8000")
@@ -13,29 +19,46 @@ else:
 quotestable = dynamodb.Table(os.getenv('TABLE_NAME') or 'quotes')
 
 def handler(event, context):
-    print(event)
+    print(json.dumps(event))
     
     httpMethod = event['requestContext']['httpMethod'] or 'GET'
     
-    print("I think my method is {}".format(httpMethod))
-    
     if httpMethod == 'GET':
-        item = {
-            'id': str(uuid.uuid4()),
-            'date': str(datetime.datetime.now())
-        }
+        quoteId = event['pathParameters']['quoteId']
         
-        try:
-            resp = quotestable.put_item(
-                Item = item
-            )
-        except ClientError as e:
-            return {'statusCode': e.response['ResponseMetadata']['HTTPStatusCode'],
-                    'body': "DynamoDB error '{}'".format(e.response['Error']['Message'])}
-        
-        return {
-            'body': "Created new quote #{} at {}".format(item['id'], item['date'])
-        }
+        if (quoteId):
+            try:
+                queryResp = quotestable.query(
+                    KeyConditionExpression = Key('id').eq(event['pathParameters']['quoteId'])
+                )
+            except ClientError as e:
+                logger.error("Failed to retrieve quote #{}: {}".format(quoteId, e))
+                return {'statusCode': 500,
+                        'body': 'Error querying database' }
+                
+            return {
+                'statusCode': 200,
+                'body': json.dumps(queryResp['Items'])
+            }
+            
+        else:
+            item = {
+                'id': str(uuid.uuid4()),
+                'date': str(datetime.datetime.now())
+            }
+            
+            try:
+                resp = quotestable.put_item(
+                    Item = item
+                )
+            except ClientError as e:
+                logger.error("Failed to store quote: {}".format(json.dumps(e.response['Error'])))
+                return {'statusCode': 500,
+                        'body': 'Error storing quote.  Please try again.')}
+            
+            return {
+                'body': "Created new quote #{} at {}".format(item['id'], item['date'])
+            }
     else:
         return {
             'body': "Invalid HTTP verb: {}".format(httpMethod),
