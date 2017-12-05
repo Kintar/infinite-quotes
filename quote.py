@@ -14,19 +14,30 @@ quotestable = dynamodb.Table(os.getenv('TABLE_NAME') or 'quotes')
 
 def handler(event, context):
     print(event)
-    item = {
-        'id': str(uuid.uuid4()),
-        'date': str(datetime.datetime.now())
-    }
     
-    try:
-        resp = quotestable.put_item(
-            Item = item
-        )
-    except ClientError as e:
-        return {'statusCode': e.response['ResponseMetadata']['HTTPStatusCode'],
-                'body': "DynamoDB error '{}'".format(e.response['Error']['Message'])}
+    httpMethod = event['requestContext']['httpMethod'] or 'GET'
     
-    return {
-        'body': "Created new quote #{} at {}".format(item['id'], item['date'])
-    }
+    print("I think my method is {}".format(httpMethod))
+    
+    if httpMethod == 'GET':
+        item = {
+            'id': str(uuid.uuid4()),
+            'date': str(datetime.datetime.now())
+        }
+        
+        try:
+            resp = quotestable.put_item(
+                Item = item
+            )
+        except ClientError as e:
+            return {'statusCode': e.response['ResponseMetadata']['HTTPStatusCode'],
+                    'body': "DynamoDB error '{}'".format(e.response['Error']['Message'])}
+        
+        return {
+            'body': "Created new quote #{} at {}".format(item['id'], item['date'])
+        }
+    else:
+        return {
+            'body': "Invalid HTTP verb: {}".format(httpMethod),
+            'statusCode': 400
+        }
