@@ -19,7 +19,7 @@ Resources:
         -
           AttributeName: date
           AttributeType: S
-      KeyShema:
+      KeySchema:
         -
           AttributeName: id
           KeyType: HASH
