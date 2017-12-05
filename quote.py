@@ -3,8 +3,7 @@ import json
 import boto3
 from botocore.exceptions import ClientError
 import uuid
-
-from datettime import datetime
+import datetime
 
 if os.getenv("AWS_SAM_LOCAL"):
     dynamodb = boto3.resource('dynamodb',endpoint_url = "http://localhost:8000")
@@ -18,7 +17,7 @@ def handler(event, context):
     if event['http_method']  == 'GET':
         item = {
             'id': str(uuid.uuid4()),
-            'date': str(datetime.now())
+            'date': str(datetime.datetime.now())
         }
         
         try:
