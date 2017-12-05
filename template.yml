@@ -54,7 +54,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       Handler: quote.handler
-      Runtime: ptyhon2.7
+      Runtime: python2.7
       Role:
         Fn::ImportValue:
           !Join ['-', [!Ref 'ProjectId', !Ref 'AWS::Region', 'LambdaTrustRole']]
