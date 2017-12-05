@@ -9,6 +9,27 @@ Parameters:
     Description: CodeStar projectId used to associate new resources to team members
 
 Resources:
+  QuotesTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      AttributeDefinitions:
+        -
+          AttributeName: id
+          AttributeType: S
+        -
+          AttributeName: date
+          AttributeType: S
+      KeyShema:
+        -
+          AttributeName: id
+          KeyType: HASH
+        -
+          AttributeName: date
+          KeyType: RANGE
+      ProvisionedThroughput:
+        ReadCapacityUnits: 1
+        WriteCapacityUnits: 1
+
   HelloWorld:
     Type: AWS::Serverless::Function
     Properties:
@@ -28,3 +49,20 @@ Resources:
           Properties:
             Path: /
             Method: post
+
+  Quote:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: quote.handler
+      Runtime: ptyhon2.7
+      Role:
+        Fn::ImportValue:
+          !Join ['-', [!Ref 'ProjectId', !Ref 'AWS::Region', 'LambdaTrustRole']]
+      Events:
+        GetEvent:
+          Type: Api
+          Properties:
+            Path: /quote
+            Method: get
+  
+  
