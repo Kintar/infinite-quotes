@@ -32,7 +32,7 @@ def handler(event, context):
                 return {'statusCode': 500,
                         'body': 'Error querying database' }
             
-            if (len(queryResp['Items'] == 1)):
+            if (len(queryResp['Items']) == 1):
                 return {
                     'statusCode': 200,
                     'body': json.dumps(queryResp['Items'][0])
