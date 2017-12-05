@@ -31,11 +31,22 @@ def handler(event, context):
                 print("Failed to retrieve quote #{}: {}".format(quoteId, e))
                 return {'statusCode': 500,
                         'body': 'Error querying database' }
-                
-            return {
-                'statusCode': 200,
-                'body': json.dumps(queryResp['Items'])
-            }
+            
+            if (len(queryResp['Items'] == 1)):
+                return {
+                    'statusCode': 200,
+                    'body': json.dumps(queryResp['Items'][0])
+                }
+            elif (len(queryResp['Items']) == 0):
+                return {
+                    'statusCode': 404,
+                    'body': 'Quote not found'
+                }
+            else:
+                return {
+                    'statusCode': 500,
+                    'body': 'Query returned multiple responses.  That shouldn\'t happen!'
+                }
             
         else:
             item = {
