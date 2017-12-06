@@ -85,7 +85,8 @@ def handler(event, context):
             print("Failed to store quote: {}", json.dumps(e))
             return {'statusCode': 500, 'body': 'Internal error storing quote.  Please try again.'}
         
-        return {'statusCode': 200, 'body': quote}
+        print('Success!')
+        return {'statusCode': 200, 'body': json.dumps(quote)}
     else:
         return {
             'body': "Invalid HTTP verb: {}".format(httpMethod),
