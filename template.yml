@@ -31,26 +31,6 @@ Resources:
         ReadCapacityUnits: 1
         WriteCapacityUnits: 1
 
-  HelloWorld:
-    Type: AWS::Serverless::Function
-    Properties:
-      Handler: index.handler
-      Runtime: python2.7
-      Role:
-        Fn::ImportValue:
-          !Join ['-', [!Ref 'ProjectId', !Ref 'AWS::Region', 'LambdaTrustRole']]
-      Events:
-        GetEvent:
-          Type: Api
-          Properties:
-            Path: /
-            Method: get
-        PostEvent:
-          Type: Api
-          Properties:
-            Path: /
-            Method: post
-
   Quote:
     Type: AWS::Serverless::Function
     Properties:
@@ -75,3 +55,21 @@ Resources:
             Path: /quote
             Method: put
   
+  QuotePage:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: quotepage.handler
+      Runtime: python2.7
+      Environment:
+        Variables:
+          TABLE_NAME:
+            Ref: QuotesTable
+      Role:
+        Fn::ImportValue:
+          !Join ['-', [!Ref 'ProjectId', !Ref 'AWS::Region', 'LambdaTrustRole']]
+      Events:
+        GetEvent:
+          Type: Api
+          Properties:
+            Path: /quotes/{page}
+            Method: get
