@@ -74,8 +74,8 @@ def handler(event, context):
                 return {'statusCode': 400, 'body': "Line {} has no quoter".format(l)}
             l+=1
         
-        quote.quoteId = str(uuid.uuid4())
-        quote.date = str(datetime.datetime.now())
+        quote['quoteId'] = str(uuid.uuid4())
+        quote['date'] = str(datetime.datetime.now())
         
         try:
             quotestable.put_item(
