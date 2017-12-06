@@ -45,7 +45,7 @@ def handler(event, context):
             else:
                 return {
                     'statusCode': 500,
-                    'body': 'Query returned multiple responses.  That shouldn\'t happen!'
+                    'body': 'Query returned multiple results.  That shouldn\'t happen!'
                 }
             
         else:
@@ -56,6 +56,7 @@ def handler(event, context):
     elif httpMethod == 'PUT':
         try:
             quote = json.loads(event['body'])
+            print(quote)
         except:
             return {'statusCode': 400, 'body': 'Malformed JSON input'}
             
