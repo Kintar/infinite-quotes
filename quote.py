@@ -63,7 +63,7 @@ def handler(event, context):
         if 'lines' not in quote:
             return {'statusCode': 400, 'body': 'Missing "lines" in request body'}
         
-        if len(quote['lines'] == 0):
+        if len(quote['lines']) == 0:
             return {'statusCode': 400, 'body': 'No lines in quote'}
         
         l = 0
