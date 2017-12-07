@@ -20,16 +20,23 @@ def handler(event, context):
     httpMethod = event['requestContext']['httpMethod'] or 'GET'
     
     if httpMethod == 'GET':
-        startKey = event['queryStringParameters'].get('startKey')
         group = event['pathParameters']['group']
-        pageSize = int(event['queryStringParameters'].get('pageSize','20'))
+        
+        startKey = event['requestContext']['queryStringParameters'].get('startKey')
+        pageSize = int(event['requestContext']['queryStringParameters'].get('pageSize','20'))
         
         try:
-            queryResp = quotestable.query(
-                KeyConditionExpression = Key('group').eq(group),
-                ExclusiveStartKey = startKey,
-                Limit = pageSize
-            )
+            if (startKey):
+                queryResp = quotestable.query(
+                    KeyConditionExpression = Key('group').eq(group),
+                    ExclusiveStartKey = startKey,
+                    Limit = pageSize
+                )
+            else:
+                queryResp = quotestable.query(
+                    KeyConditionExpression = Key('group').eq(group),
+                    Limit = pageSize
+                )
         except ClientError as e:
             print("Failed to retrieve quotes for group #{}: {}".format(group, e))
             return {'statusCode': 500,
