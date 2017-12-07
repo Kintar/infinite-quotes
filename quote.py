@@ -37,7 +37,7 @@ def handler(event, context):
             if (startKey):
                 queryResp = quotestable.query(
                     KeyConditionExpression = Key('group').eq(group),
-                    ExclusiveStartKey = {'group': group, 'dateTime': startKey},
+                    ExclusiveStartKey = {'group': group, 'timestamp': startKey},
                     Limit = pageSize
                 )
             else:
