@@ -8,11 +8,15 @@ from botocore.exceptions import ClientError
 from boto3.dynamodb.conditions import Key, Attr
 
 if os.getenv("AWS_SAM_LOCAL"):
-    dynamodb = boto3.resource('dynamodb',endpoint_url = "http://localhost:8000")
+    print("Using local DynamoDB")
+    dynamodb = boto3.resource('dynamodb', region_name = 'us-east-2')
 else:
+    print("Using remote DynamoDB")
     dynamodb = boto3.resource('dynamodb')
 
-quotestable = dynamodb.Table(os.getenv('TABLE_NAME') or 'quotes')
+tableName = os.getenv('TABLE_NAME') or 'awscodestar-infinite-quotes-lambda-QuotesTable-11265XBJOKC56'
+print("Using table '{}'".format(tableName))
+quotestable = dynamodb.Table(tableName)
 
 def handler(event, context):
     print(json.dumps(event))
@@ -33,7 +37,7 @@ def handler(event, context):
             if (startKey):
                 queryResp = quotestable.query(
                     KeyConditionExpression = Key('group').eq(group),
-                    ExclusiveStartKey = startKey,
+                    ExclusiveStartKey = json.loads(startKey),
                     Limit = pageSize
                 )
             else:
@@ -52,11 +56,11 @@ def handler(event, context):
         print(json.dumps(queryResp))
         
         result = {
-            'items': json.dumps(queryResp['Items'])
+            'items': queryResp['Items']
         }
         
         if queryResp.get('LastEvaluatedKey'):
-            result['startKey'] = json.dumps(queryResp['LastEvaluatedKey'])
+            result['startKey'] = queryResp['LastEvaluatedKey']
         
         count = len(queryResp['Items'])
         if (count == 0):
