@@ -8,14 +8,11 @@ from botocore.exceptions import ClientError
 from boto3.dynamodb.conditions import Key, Attr
 
 if os.getenv("AWS_SAM_LOCAL"):
-    print("Using local DynamoDB")
     dynamodb = boto3.resource('dynamodb', region_name = 'us-east-2')
 else:
-    print("Using remote DynamoDB")
     dynamodb = boto3.resource('dynamodb')
 
 tableName = os.getenv('TABLE_NAME') or 'awscodestar-infinite-quotes-lambda-QuotesTable-11265XBJOKC56'
-print("Using table '{}'".format(tableName))
 quotestable = dynamodb.Table(tableName)
 
 def handler(event, context):
