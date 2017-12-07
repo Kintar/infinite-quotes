@@ -51,7 +51,7 @@ def handler(event, context):
             'items': json.dumps(queryResp['Items'])
         }
         
-        if queryResp.get['LastEvaluatedKey']:
+        if queryResp.get('LastEvaluatedKey'):
             result['startKey'] = json.dumps(queryResp['LastEvaluatedKey'])
         
         count = len(queryResp['Items'])
