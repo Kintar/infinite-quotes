@@ -22,8 +22,10 @@ def handler(event, context):
     if httpMethod == 'GET':
         group = event['pathParameters']['group']
         
-        startKey = event['requestContext']['queryStringParameters'].get('startKey')
-        pageSize = int(event['requestContext']['queryStringParameters'].get('pageSize','20'))
+        queryParams = event['requestContext'].get('queryStringParameters') or {}
+        
+        startKey = queryParams.get('startKey')
+        pageSize = int(queryParams.get('pageSize','20'))
         
         try:
             if (startKey):
