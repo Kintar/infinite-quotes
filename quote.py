@@ -52,6 +52,8 @@ def handler(event, context):
             'startKey': json.dumps(queryResp['LastEvaluatedKey'])
         }
         
+        print(json.dumps(queryResp))
+        
         if queryResp.get['LastEvaluatedKey']:
             result['startKey'] = json.dumps(queryResp['LastEvaluatedKey'])
         
