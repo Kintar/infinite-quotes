@@ -20,10 +20,9 @@ def handler(event, context):
     httpMethod = event['requestContext']['httpMethod'] or 'GET'
     
     if httpMethod == 'GET':
-        body = json.loads(event['body'] or "{}")
-        startKey = body.get('startKey')
+        startKey = event['queryStringParameters'].get('startKey')
         group = event['pathParameters']['group']
-        pageSize = int(body.get('pageSize','20'))
+        pageSize = int(event['queryStringParameters'].get('pageSize','20'))
         
         try:
             queryResp = quotestable.query(
