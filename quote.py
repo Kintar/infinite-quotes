@@ -20,42 +20,52 @@ def handler(event, context):
     httpMethod = event['requestContext']['httpMethod'] or 'GET'
     
     if httpMethod == 'GET':
-        quoteId = event['pathParameters']['quoteId']
+        body = json.loads(event['body'])
+        startKey = body['startKey']
+        group = event['pathParameters']['group']
+        startKey = event['queryStringParameters']['startKey']
         
-        if (quoteId):
-            try:
-                queryResp = quotestable.query(
-                    KeyConditionExpression = Key('id').eq(event['pathParameters']['quoteId'])
-                )
-            except ClientError as e:
-                print("Failed to retrieve quote #{}: {}".format(quoteId, e))
-                return {'statusCode': 500,
-                        'body': 'Error querying database' }
-            
-            if (len(queryResp['Items']) == 1):
-                return {
-                    'statusCode': 200,
-                    'body': json.dumps(queryResp['Items'][0])
-                }
-            elif (len(queryResp['Items']) == 0):
-                return {
-                    'statusCode': 404,
-                    'body': 'Quote not found'
-                }
-            else:
-                return {
-                    'statusCode': 500,
-                    'body': 'Query returned multiple results.  That shouldn\'t happen!'
-                }
-            
-        else:
+        try:
+            queryResp = quotestable.query(
+                KeyConditionExpression = Key('group').eq(group),
+                ExclusiveStartKey = startKey
+            )
+        except ClientError as e:
+            print("Failed to retrieve quotes for group #{}: {}".format(group, e))
+            return {'statusCode': 500,
+                    'body': 'Error querying database' }
+        except Exception as e:
+            print(e)
+            return {'statusCode': 500, 'body': 'Internal server error'}
+        
+        result = {
+            'items': json.dumps(queryResp['Items']),
+            'startKey': json.dumps(queryResp['LastEvaluatedKey'])
+        }
+        
+        count = len(queryResp['Items'])
+        if (count == 0):
             return {
-                'statusCode': 400,
-                'body': 'Missing required path parameter "quoteId"'
+                'statusCode': 404,
+                'body': 'No data found'
             }
+        elif (len(queryResp['Items']) > 0):
+            return {
+                'statusCode': 200,
+                'body': json.dumps(result)
+            }
+        else:
+            print(queryResp)
+            return {
+                'statusCode': 500,
+                'body': 'Unexpected error'
+            }
+            
     elif httpMethod == 'PUT':
         try:
             quote = json.loads(event['body'])
+            quote['group'] = event['pathParameters']['group']
+            quote['dateTime'] = str(datetime.datetime.now())
             print(quote)
         except:
             return {'statusCode': 400, 'body': 'Malformed JSON input'}
@@ -73,9 +83,6 @@ def handler(event, context):
             if 'quoter' not in line:
                 return {'statusCode': 400, 'body': "Line {} has no quoter".format(l)}
             l+=1
-        
-        quote['id'] = str(uuid.uuid4())
-        quote['date'] = str(datetime.datetime.now())
         
         try:
             quotestable.put_item(

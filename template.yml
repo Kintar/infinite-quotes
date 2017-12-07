@@ -15,21 +15,21 @@ Resources:
     Properties:
       AttributeDefinitions:
         -
-          AttributeName: id
+          AttributeName: group
           AttributeType: S
         -
-          AttributeName: date
+          AttributeName: dateTime
           AttributeType: S
       KeySchema:
         -
-          AttributeName: id
+          AttributeName: group
           KeyType: HASH
         -
-          AttributeName: date
+          AttributeName: dateTime
           KeyType: RANGE
       ProvisionedThroughput:
-        ReadCapacityUnits: 1
-        WriteCapacityUnits: 1
+        ReadCapacityUnits: 2
+        WriteCapacityUnits: 2
 
   Quote:
     Type: AWS::Serverless::Function
@@ -47,12 +47,12 @@ Resources:
         GetEvent:
           Type: Api
           Properties:
-            Path: /quote/{quoteId}
+            Path: /quotes/{group}
             Method: get
         PutEvent:
           Type: Api
           Properties:
-            Path: /quote
+            Path: /quotes/{group}
             Method: put
   
   QuotePage:
