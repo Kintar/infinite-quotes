@@ -22,7 +22,7 @@ def handler(event, context):
     if httpMethod == 'GET':
         group = event['pathParameters']['group']
         
-        queryParams = event['requestContext'].get('queryStringParameters') or {}
+        queryParams = event.get('queryStringParameters') or {}
         
         startKey = queryParams.get('startKey')
         pageSize = int(queryParams.get('pageSize','20'))
