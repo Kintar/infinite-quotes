@@ -20,16 +20,16 @@ def handler(event, context):
     httpMethod = event['requestContext']['httpMethod'] or 'GET'
     
     if httpMethod == 'GET':
-        body = json.loads(event['body'])
-        startKey = body['startKey']
+        body = json.loads(event['body'] or "{}")
+        startKey = body.get('startKey')
         group = event['pathParameters']['group']
-        limit = int(body['pageSize'] or 20)
+        pageSize = int(body.get('pageSize','20'))
         
         try:
             queryResp = quotestable.query(
                 KeyConditionExpression = Key('group').eq(group),
                 ExclusiveStartKey = startKey,
-                Limit = 20 # TODO : Make this a parameter
+                Limit = pageSize
             )
         except ClientError as e:
             print("Failed to retrieve quotes for group #{}: {}".format(group, e))
