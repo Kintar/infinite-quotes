@@ -18,14 +18,14 @@ Resources:
           AttributeName: group
           AttributeType: S
         -
-          AttributeName: dateTime
+          AttributeName: timestamp
           AttributeType: S
       KeySchema:
         -
           AttributeName: group
           KeyType: HASH
         -
-          AttributeName: dateTime
+          AttributeName: timestamp
           KeyType: RANGE
       ProvisionedThroughput:
         ReadCapacityUnits: 2

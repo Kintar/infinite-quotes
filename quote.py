@@ -2,7 +2,7 @@ import os
 import json
 import boto3
 import uuid
-import datetime
+import time
 import logging
 
 from botocore.exceptions import ClientError
@@ -37,7 +37,7 @@ def handler(event, context):
             if (startKey):
                 queryResp = quotestable.query(
                     KeyConditionExpression = Key('group').eq(group),
-                    ExclusiveStartKey = json.loads(startKey),
+                    ExclusiveStartKey = {'group': group, 'dateTime': startKey},
                     Limit = pageSize
                 )
             else:
@@ -58,7 +58,7 @@ def handler(event, context):
         }
         
         if queryResp.get('LastEvaluatedKey'):
-            result['startKey'] = queryResp['LastEvaluatedKey']
+            result['startKey'] = queryResp['LastEvaluatedKey']['timestamp']
         
         count = len(queryResp['Items'])
         if (count == 0):
@@ -81,8 +81,6 @@ def handler(event, context):
     elif httpMethod == 'PUT':
         try:
             quote = json.loads(event['body'])
-            quote['group'] = event['pathParameters']['group']
-            quote['dateTime'] = str(datetime.datetime.now())
         except:
             return {'statusCode': 400, 'body': 'Malformed JSON input'}
             
@@ -100,6 +98,9 @@ def handler(event, context):
                 return {'statusCode': 400, 'body': "Line {} has no quoter".format(l)}
             l+=1
         
+        quote['group'] = event['pathParameters']['group']
+        quote['timestamp'] = time.time()
+
         try:
             quotestable.put_item(
                 Item = quote
