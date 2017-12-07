@@ -55,21 +55,3 @@ Resources:
             Path: /quotes/{group}
             Method: put
   
-  QuotePage:
-    Type: AWS::Serverless::Function
-    Properties:
-      Handler: quotepage.handler
-      Runtime: python2.7
-      Environment:
-        Variables:
-          TABLE_NAME:
-            Ref: QuotesTable
-      Role:
-        Fn::ImportValue:
-          !Join ['-', [!Ref 'ProjectId', !Ref 'AWS::Region', 'LambdaTrustRole']]
-      Events:
-        GetEvent:
-          Type: Api
-          Properties:
-            Path: /quotes/{page}
-            Method: get
