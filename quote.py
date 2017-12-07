@@ -27,6 +27,8 @@ def handler(event, context):
         startKey = queryParams.get('startKey')
         pageSize = int(queryParams.get('pageSize','20'))
         
+        print("Page size : {}".format(pageSize))
+        
         try:
             if (startKey):
                 queryResp = quotestable.query(
@@ -46,6 +48,8 @@ def handler(event, context):
         except Exception as e:
             print(e)
             return {'statusCode': 500, 'body': 'Internal server error'}
+        
+        print(json.dumps(queryResp))
         
         result = {
             'items': json.dumps(queryResp['Items'])
