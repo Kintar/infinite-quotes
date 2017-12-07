@@ -16,7 +16,7 @@ if os.getenv("AWS_SAM_LOCAL"):
 else:
     dynamodb = boto3.resource('dynamodb')
 
-tableName = os.getenv('TABLE_NAME') or 'awscodestar-infinite-quotes-lambda-QuotesTable-11265XBJOKC56'
+tableName = os.getenv('TABLE_NAME') or 'awscodestar-infinite-quotes-lambda-QuotesTable-1RB5F97XSMSKS'
 quotestable = dynamodb.Table(tableName)
 
 def handler(event, context):
@@ -99,7 +99,7 @@ def handler(event, context):
             l+=1
         
         quote['group'] = event['pathParameters']['group']
-        quote['timestamp'] = time.time()
+        quote['timestamp'] = str(time.time())
 
         try:
             quotestable.put_item(
