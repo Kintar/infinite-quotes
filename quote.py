@@ -3,9 +3,13 @@ import json
 import boto3
 import uuid
 import datetime
+import logging
 
 from botocore.exceptions import ClientError
 from boto3.dynamodb.conditions import Key, Attr
+
+logger = logging.getLogger()
+logger.setLevel(logging.INFO)
 
 if os.getenv("AWS_SAM_LOCAL"):
     dynamodb = boto3.resource('dynamodb', region_name = 'us-east-2')
@@ -16,8 +20,7 @@ tableName = os.getenv('TABLE_NAME') or 'awscodestar-infinite-quotes-lambda-Quote
 quotestable = dynamodb.Table(tableName)
 
 def handler(event, context):
-    print(json.dumps(event))
-    
+    logger.info("Got event: {}".format(json.dumps(event)))
     httpMethod = event['requestContext']['httpMethod'] or 'GET'
     
     if httpMethod == 'GET':
@@ -28,7 +31,7 @@ def handler(event, context):
         startKey = queryParams.get('startKey')
         pageSize = int(queryParams.get('pageSize','20'))
         
-        print("Page size : {}".format(pageSize))
+        logger.info("Page size is {}".format(pageSize))
         
         try:
             if (startKey):
@@ -47,10 +50,8 @@ def handler(event, context):
             return {'statusCode': 500,
                     'body': 'Error querying database' }
         except Exception as e:
-            print(e)
+            logger.error(e)
             return {'statusCode': 500, 'body': 'Internal server error'}
-        
-        print(json.dumps(queryResp))
         
         result = {
             'items': queryResp['Items']
@@ -71,7 +72,7 @@ def handler(event, context):
                 'body': json.dumps(result)
             }
         else:
-            print(queryResp)
+            logger.error("Bad response from query: {}".format(json.dumps(queryResp)))
             return {
                 'statusCode': 500,
                 'body': 'Unexpected error'
@@ -82,7 +83,6 @@ def handler(event, context):
             quote = json.loads(event['body'])
             quote['group'] = event['pathParameters']['group']
             quote['dateTime'] = str(datetime.datetime.now())
-            print(quote)
         except:
             return {'statusCode': 400, 'body': 'Malformed JSON input'}
             
@@ -105,7 +105,7 @@ def handler(event, context):
                 Item = quote
                 )
         except ClientError as e:
-            print("Failed to store quote: {}", json.dumps(e))
+            logger.error("Failed to store quote: {}".format(json.dumps(e)))
             return {'statusCode': 500, 'body': 'Internal error storing quote.  Please try again.'}
         
         print('Success!')
