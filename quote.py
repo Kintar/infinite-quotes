@@ -48,11 +48,8 @@ def handler(event, context):
             return {'statusCode': 500, 'body': 'Internal server error'}
         
         result = {
-            'items': json.dumps(queryResp['Items']),
-            'startKey': json.dumps(queryResp['LastEvaluatedKey'])
+            'items': json.dumps(queryResp['Items'])
         }
-        
-        print(json.dumps(queryResp))
         
         if queryResp.get['LastEvaluatedKey']:
             result['startKey'] = json.dumps(queryResp['LastEvaluatedKey'])
