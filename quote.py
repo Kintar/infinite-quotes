@@ -23,12 +23,13 @@ def handler(event, context):
         body = json.loads(event['body'])
         startKey = body['startKey']
         group = event['pathParameters']['group']
-        startKey = event['queryStringParameters']['startKey']
+        limit = int(body['pageSize'] or 20)
         
         try:
             queryResp = quotestable.query(
                 KeyConditionExpression = Key('group').eq(group),
-                ExclusiveStartKey = startKey
+                ExclusiveStartKey = startKey,
+                Limit = 20 # TODO : Make this a parameter
             )
         except ClientError as e:
             print("Failed to retrieve quotes for group #{}: {}".format(group, e))
