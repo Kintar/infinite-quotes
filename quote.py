@@ -38,12 +38,14 @@ def handler(event, context):
                 queryResp = quotestable.query(
                     KeyConditionExpression = Key('group').eq(group),
                     ExclusiveStartKey = {'group': group, 'timestamp': startKey},
-                    Limit = pageSize
+                    Limit = pageSize,
+                    ScanIndexForward = False
                 )
             else:
                 queryResp = quotestable.query(
                     KeyConditionExpression = Key('group').eq(group),
-                    Limit = pageSize
+                    Limit = pageSize,
+                    ScanIndexForward = False
                 )
         except ClientError as e:
             print("Failed to retrieve quotes for group #{}: {}".format(group, e))
@@ -82,20 +84,20 @@ def handler(event, context):
         try:
             quote = json.loads(event['body'])
         except:
-            return {'statusCode': 400, 'body': 'Malformed JSON input'}
-            
+            return {'statusCode': 405, 'body': 'Malformed JSON input'}
+        
         if 'lines' not in quote:
-            return {'statusCode': 400, 'body': 'Missing "lines" in request body'}
+            return {'statusCode': 405, 'body': 'Missing "lines" in request body'}
         
         if len(quote['lines']) == 0:
-            return {'statusCode': 400, 'body': 'No lines in quote'}
+            return {'statusCode': 405, 'body': 'No lines in quote'}
         
         l = 0
         for line in quote['lines']:
             if 'text' not in line:
-                return {'statusCode': 400, 'body': "Line {} has no text".format(l)}
+                return {'statusCode': 405, 'body': "Line {} has no text".format(l)}
             if 'quoter' not in line:
-                return {'statusCode': 400, 'body': "Line {} has no quoter".format(l)}
+                return {'statusCode': 405, 'body': "Line {} has no quoter".format(l)}
             l+=1
         
         quote['group'] = event['pathParameters']['group']
