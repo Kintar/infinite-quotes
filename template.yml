@@ -12,6 +12,7 @@ Resources:
 
   QuotesTable:
     Type: AWS::DynamoDB::Table
+    Name: 'InfiniteQuotes-Quotes'
     Properties:
       AttributeDefinitions:
         -
@@ -54,4 +55,3 @@ Resources:
           Properties:
             Path: /quotes/{group}
             Method: put
-  
