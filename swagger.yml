@@ -1,0 +1,149 @@
+swagger: "2.0"
+info:
+  description: "This is the backing API for the Infinite Quotes quote wall server.  You can find the source code [on GitHub](https://github.com/Kintar/infinite-quotes), or visit our reference implementation at [http://quotes.infinities-within.net](http://quotes.infinities-within.net)."
+  version: "1.0.0"
+  title: "Infinite Quotes"
+  contact:
+    email: "kintar@infinties-within.net"
+  license:
+    name: "GPL 3.0"
+    url: "https://www.gnu.org/licenses/gpl-3.0.en.html"
+externalDocs:
+  description: "GitHub Repository"
+  url: "https://github.com/Kintar/infinite-quotes"
+host: "api.quotewall.infinities-within.net"
+basePath: "/v1"
+tags:
+- name: "quotes"
+  description: "Interacting with quotes"
+schemes:
+- "https"
+
+definitions:
+  Line:
+    type: object
+    properties:
+      text:
+        type: string
+      quoter:
+        type: string
+  Quote:
+    type: object
+    properties:
+      group:
+        type: string
+      timestamp:
+        type: string
+        description: "Epoch timestamp"
+      lines:
+        type: array
+        items:
+          $ref: '#/definitions/Line'
+    example:
+      group: "Examples"
+      timestamp: "1512745117.301"
+      lines:
+        -
+          quoter: "AL"
+          text: "Well, THAT happened..."
+        -
+          quoter: "JC"
+          text: "You can't prove anything."
+          
+  QuoteSubmission:
+    type: object
+    properties:
+      lines:
+        type: array
+        items:
+          $ref: '#/definitions/Line'
+    required:
+      - lines
+    example:
+      lines:
+        -
+          quoter: "AL"
+          text: "Well, THAT happened..."
+        -
+          quoter: "JC"
+          text: "Yeah, but you can't prove it."
+
+  QuotePage:
+    type: object
+    properties:
+      items:
+        type: array
+        items: 
+          $ref: "#/definitions/Quote"
+          
+paths:
+  /quotes/{group}:
+    put:
+      tags:
+      - "quotes"
+      summary: "Add a new quote to the wall"
+      operationId: "addQuote"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "path"
+        name: "group"
+        description: "The group this quote belongs to"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        description: "Quote object to be added"
+        required: true
+        schema:
+          $ref: "#/definitions/QuoteSubmission"
+      responses:
+        405:
+          description: "Malformed JSON or otherwise invalid input."
+        409:
+          description: "The ID provided is already in use.  Will return the existing item in the response body."
+          schema:
+            $ref: '#/definitions/Quote'
+    get:
+      tags:
+      - "quotes"
+      summary: "Retrieve quotes for the specified group, sorted in reverse submission order."
+      operationId: listQuotes
+      produces:
+      - application/json
+      parameters: 
+      - in: path
+        name: group
+        description: "The group of quotes to retrieve"
+        required: true
+        type: string
+      - in: query
+        name: startKey
+        description: "Timestamp of the first quote to retrieve.  NOTE: This must exactly match the timestamp of a quote!"
+        type: "string"
+        required: false
+      - in: query
+        name: pageSize
+        required: false
+        description: "Maximum number of quotes to retrieve in a single response"
+        type: integer
+      responses:
+        404:
+          description: "No results found"
+        200:
+          description: "Fetch a page of quotes from the given group"
+          schema:
+            $ref: '#/definitions/QuotePage'
+            
+securityDefinitions:
+  cognitoUsers:
+    type: "apiKey"
+    name: "Authorization"
+    in: "header"
+    x-amazon-apigateway-authtype: "cognito_user_pools"
+    x-amazon-apigateway-authorizer:
+      providerARNs:
+      - Fn::Sub: ${CognitoUserPool-Arn}
+      type: "cognito_user_pools"
