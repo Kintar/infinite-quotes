@@ -17,6 +17,15 @@ html ->
 					nav class: 'mdl-navigation', ->
 						a class: 'mdl-navigation__link', href: '#', 'About'
 						a class: 'mdl-navigation__link', href: '#', 'Sign In'
-			text @content
+
+			div class: 'mdl-layout__drawer', ->
+				span class: 'mdl-layout__title', ->
+					@site.title
+				nav class: 'mdl-nagivation':
+					a class: 'mdl-navigation__link', href: '#', 'Group'
+
+			main class: 'mdl-layout__content', ->
+				text @content
+			
 			text @getBlock('scripts').toHTML()
 			text @partial 'footer'
