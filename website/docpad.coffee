@@ -18,7 +18,7 @@ docpadConfig = {
 
 		# Helper functions for stupidity of CSS and MDL
 		buttonCss: ->
-			'mdl-button mdl-js-button mdl-button--colored'
+			'mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect'
 }
 
 # Export the DocPad Configuration

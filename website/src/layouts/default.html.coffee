@@ -1,10 +1,11 @@
 doctype 5
 html ->
 	head ->
-		meta charset: 'utf-8'
-		title "#{@site.title} | Home"
-		meta(name: 'description', content: @desc) if @desc?
-		@partial 'main-style'
+		title "#{@site.title} | #{@document.title}"
+		text @getBlock('meta').toHTML()
+		text @getBlock('styles').toHTML()
+		text @partial 'main-style'
 	body ->
-		h1 @document.title
-		@content
+		text @content
+		text @getBlock('scripts').toHTML()
+		text @partial 'footer'

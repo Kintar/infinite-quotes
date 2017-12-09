@@ -4,7 +4,6 @@ layout: "default"
 isPage: true
 ---
 
-div ->
-	p "And so it begins."
+p "And so it begins."
 
-	button class: @buttonCss(), "Foo"
+button class: @buttonCss(), "Foo"
