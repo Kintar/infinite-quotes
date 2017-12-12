@@ -1,25 +1,11 @@
 import React, { Component } from 'react';
-import {GridList, GridListTile } from 'material-ui/GridList';
-
+import Grid from 'material-ui/Grid';
 import quotesClient from './quotesClient';
-
-const styles = theme => ({
-	root: {
-		display: 'flex',
-		flexWrap: 'wrap',
-		justifyContent: 'space-around',
-		overflow: 'hidden',
-		background: theme.palette.background.paper
-	},
-	gridList: {
-		width: 500
-	}
-})
+import QuoteCard from './QuoteCard';
 
 class QuotesPanel extends Component {
 	constructor(props) {
 		super(props);
-		this.classes = props;
 		this.state = { startKey: '', group: 'testing', quotes: [] };
 		this.client = quotesClient;
 	}
@@ -39,7 +25,7 @@ class QuotesPanel extends Component {
 		};
 
 		
-		var req = quotesClient.methods.getPage(args, (data, response) => {
+		var req = this.client.methods.getPage(args, (data, response) => {
 			data.items.concat(this.state.quotes);
 			this.setState({ quotes: data.items });
 		});
@@ -59,17 +45,11 @@ class QuotesPanel extends Component {
 
 	render() {
 		return(
-			<div className={this.classes.root}>
-				<GridList cellHeight={160} className={this.classes.gridList} cols={6}>
-					{this.state.quotes.map(quote => (
-						<GridListTile key={quote.timestamp} cols={1}>
-							{quote.lines.map(line => (
-								<p>{line.text}</p>
-							))}
-						</GridListTile>
-					))}
-				</GridList>
-			</div>
+			<Grid container >
+				{this.state.quotes.map(quote => (
+					<QuoteCard quote={quote} key={quote.timestamp} />
+				))}
+			</Grid>
 		);
 	}
 }

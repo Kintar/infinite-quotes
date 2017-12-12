@@ -23,6 +23,14 @@ const quotesTheme = createMuiTheme({
     'type': 'light',
     primary: iqpalette,
     secondary: iqpalette
+  },
+  overrides: {
+    MuiGrid: {
+        'spacing-xs-16': {
+            width: '100%',
+            margin: 0
+        }
+    }
   }
 });
 
