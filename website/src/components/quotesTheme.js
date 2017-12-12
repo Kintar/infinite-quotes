@@ -20,7 +20,7 @@ const iqpalette = {
 
 const quotesTheme = createMuiTheme({
   palette: {
-    'type': 'dark',
+    'type': 'light',
     primary: iqpalette,
     secondary: iqpalette
   }
