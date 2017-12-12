@@ -1,8 +1,21 @@
 version: 0.2
 
 phases:
+  install:
+    commands:
+      - curl -sL https://deb.nodesource.com/setup_7.x | bash -
+      - apt-get install -y nodejs
+      - curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
+      - echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
+      - apt-get update
+      - apt-get install -y yarn
+  pre-build:
+    commands:
+      - yarn
   build:
     commands:
+      - yarn run build
+      - aws s3 sync --delete --exclude static/media/* build/ "s3://quotes.infinities-within.net"
       - aws cloudformation package --template template.yml --s3-bucket $S3_BUCKET --output-template template-export.yml
 artifacts:
   type: zip
