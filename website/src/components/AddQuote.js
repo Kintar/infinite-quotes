@@ -13,14 +13,16 @@ const styles = theme => ({
 });
 
 class AddQuote extends Component {
-  render() {
-  	const { classes } = this.props;
-    return (
-			<Button fab color="accent" className={classes.addButton} >
-				<AddIcon color="contrastText"/>
-			</Button>
-    );
-  }
+	render() {
+		const { classes } = this.props;
+		return (
+			<React.Fragment>
+				<Button fab color="accent" className={classes.addButton} onClick={this.props.onClick} >
+					<AddIcon color="contrastText"/>
+				</Button>
+			</React.Fragment>
+		);
+	}
 }
 
 export default withStyles(styles)(AddQuote);
