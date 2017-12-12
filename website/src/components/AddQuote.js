@@ -17,7 +17,7 @@ class AddQuote extends Component {
   	const { classes } = this.props;
     return (
 			<Button fab color="accent" className={classes.addButton} >
-				<AddIcon />
+				<AddIcon color="contrastText"/>
 			</Button>
     );
   }

@@ -1,12 +1,8 @@
 import React, { Component } from 'react';
 import QuotesAppBar from './QuotesAppBar';
-import Button from 'material-ui/Button'
+import QuotesPanel from './QuotesPanel';
 
-import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles/';
-
-import { green, deepOrange, red } from 'material-ui/colors/'
-
-import AddIcon from 'material-ui-icons/Add'
+import { MuiThemeProvider } from 'material-ui/styles/';
 
 import './App.css';
 import './flexboxgrid.min.css'
@@ -19,6 +15,7 @@ class App extends Component {
     return (
     	<MuiThemeProvider theme={quotesTheme}>
 			<QuotesAppBar />
+			<QuotesPanel />
 			<AddQuote />
 		</MuiThemeProvider>
     );
