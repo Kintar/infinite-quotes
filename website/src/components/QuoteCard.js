@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Grid from 'material-ui/Grid';
-import Card, {CardActions, CardContent} from 'material-ui/Card';
+import Card from 'material-ui/Card';
 import Typography from 'material-ui/Typography';
 import Divider from 'material-ui/Divider';
 import { withStyles } from 'material-ui/styles';
@@ -13,10 +13,6 @@ const style = {
 }
 
 class QuoteCard extends Component {
-	constructor(props) {
-		super(props);
-	}
-
 	render() {
 		var quote = this.props.quote;
 		return (
