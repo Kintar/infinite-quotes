@@ -1,0 +1,135 @@
+{
+    "Quote": {
+        "lambda": {
+            "body": null,
+            "resource": "/quotes/{group}",
+            "requestContext": {
+                "requestTime": "12/Dec/2017:16:11:33 +0000",
+                "protocol": "HTTP/1.1",
+                "resourceId": "chynpd",
+                "apiId": "py8n4ohrj5",
+                "resourcePath": "/quotes/{group}",
+                "httpMethod": "GET",
+                "requestId": "1ee481fa-df57-11e7-92d3-85374b5ecbd8",
+                "path": "/Prod/quotes/testing",
+                "accountId": "840861411173",
+                "requestTimeEpoch": 1513095093161,
+                "identity": {
+                    "apiKey": "",
+                    "userArn": null,
+                    "cognitoAuthenticationType": null,
+                    "accessKey": null,
+                    "caller": null,
+                    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Safari/537.36",
+                    "user": null,
+                    "cognitoIdentityPoolId": null,
+                    "cognitoIdentityId": null,
+                    "cognitoAuthenticationProvider": null,
+                    "sourceIp": "74.255.130.254",
+                    "accountId": null
+                },
+                "stage": "Prod"
+            },
+            "queryStringParameters": null,
+            "httpMethod": "GET",
+            "pathParameters": {
+                "group": "testing"
+            },
+            "headers": {
+                "origin": "http://localhost:3000",
+                "Via": "2.0 52b80ce4c1439bfc3cc5ee637995110a.cloudfront.net (CloudFront)",
+                "Accept-Language": "en-US,en;q=0.9",
+                "Accept-Encoding": "gzip, deflate, br",
+                "CloudFront-Is-SmartTV-Viewer": "false",
+                "CloudFront-Forwarded-Proto": "https",
+                "X-Forwarded-For": "74.255.130.254, 54.239.170.50",
+                "CloudFront-Viewer-Country": "US",
+                "Accept": "*/*",
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Safari/537.36",
+                "X-Amzn-Trace-Id": "Root=1-5a2fffb5-25d500854a68356d20b34612",
+                "dnt": "1",
+                "Host": "py8n4ohrj5.execute-api.us-east-2.amazonaws.com",
+                "X-Forwarded-Proto": "https",
+                "Referer": "http://localhost:3000/",
+                "CloudFront-Is-Tablet-Viewer": "false",
+                "X-Forwarded-Port": "443",
+                "X-Amz-Cf-Id": "DDZRFRDHSfTt4tUpFXvW43fDsrcfYxqWvnlNuxSN9dw8Y62mjc1kng==",
+                "CloudFront-Is-Mobile-Viewer": "false",
+                "CloudFront-Is-Desktop-Viewer": "true"
+            },
+            "stageVariables": null,
+            "path": "/quotes/testing",
+            "isBase64Encoded": false
+        }
+    },
+    "": {
+        "apigateway": {
+            "path": "",
+            "method": {
+                "value": "",
+                "items": []
+            },
+            "body": {
+                "body": null,
+                "resource": "/quotes/{group}",
+                "requestContext": {
+                    "requestTime": "12/Dec/2017:16:11:33 +0000",
+                    "protocol": "HTTP/1.1",
+                    "resourceId": "chynpd",
+                    "apiId": "py8n4ohrj5",
+                    "resourcePath": "/quotes/{group}",
+                    "httpMethod": "GET",
+                    "requestId": "1ee481fa-df57-11e7-92d3-85374b5ecbd8",
+                    "path": "/Prod/quotes/testing",
+                    "accountId": "840861411173",
+                    "requestTimeEpoch": 1513095093161,
+                    "identity": {
+                        "apiKey": "",
+                        "userArn": null,
+                        "cognitoAuthenticationType": null,
+                        "accessKey": null,
+                        "caller": null,
+                        "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Safari/537.36",
+                        "user": null,
+                        "cognitoIdentityPoolId": null,
+                        "cognitoIdentityId": null,
+                        "cognitoAuthenticationProvider": null,
+                        "sourceIp": "74.255.130.254",
+                        "accountId": null
+                    },
+                    "stage": "Prod"
+                },
+                "queryStringParameters": null,
+                "httpMethod": "GET",
+                "pathParameters": {
+                    "group": "testing"
+                },
+                "headers": {
+                    "origin": "http://localhost:3000",
+                    "Via": "2.0 52b80ce4c1439bfc3cc5ee637995110a.cloudfront.net (CloudFront)",
+                    "Accept-Language": "en-US,en;q=0.9",
+                    "Accept-Encoding": "gzip, deflate, br",
+                    "CloudFront-Is-SmartTV-Viewer": "false",
+                    "CloudFront-Forwarded-Proto": "https",
+                    "X-Forwarded-For": "74.255.130.254, 54.239.170.50",
+                    "CloudFront-Viewer-Country": "US",
+                    "Accept": "*/*",
+                    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Safari/537.36",
+                    "X-Amzn-Trace-Id": "Root=1-5a2fffb5-25d500854a68356d20b34612",
+                    "dnt": "1",
+                    "Host": "py8n4ohrj5.execute-api.us-east-2.amazonaws.com",
+                    "X-Forwarded-Proto": "https",
+                    "Referer": "http://localhost:3000/",
+                    "CloudFront-Is-Tablet-Viewer": "false",
+                    "X-Forwarded-Port": "443",
+                    "X-Amz-Cf-Id": "DDZRFRDHSfTt4tUpFXvW43fDsrcfYxqWvnlNuxSN9dw8Y62mjc1kng==",
+                    "CloudFront-Is-Mobile-Viewer": "false",
+                    "CloudFront-Is-Desktop-Viewer": "true"
+                },
+                "stageVariables": null,
+                "path": "/quotes/testing",
+                "isBase64Encoded": false
+            }
+        }
+    }
+}

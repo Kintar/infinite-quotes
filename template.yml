@@ -54,3 +54,9 @@ Resources:
           Properties:
             Path: /quotes/{group}
             Method: put
+        OptionsEvent:
+          Type: Api
+          Properties:
+            Path: /quotes
+            Method: options
+

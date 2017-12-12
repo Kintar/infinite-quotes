@@ -23,7 +23,14 @@ def handler(event, context):
     logger.info("Got event: {}".format(json.dumps(event)))
     httpMethod = event['requestContext']['httpMethod'] or 'GET'
     
-    if httpMethod == 'GET':
+    
+    if httpMethod == 'OPTIONS':
+        return { 'statusCode': 200,
+            'headers': {
+                'Access-Control-Allow-Origin': '*'
+            }
+        }
+    elif httpMethod == 'GET':
         group = event['pathParameters']['group']
         
         queryParams = event.get('queryStringParameters') or {}
@@ -71,7 +78,10 @@ def handler(event, context):
         elif (len(queryResp['Items']) > 0):
             return {
                 'statusCode': 200,
-                'body': json.dumps(result)
+                'body': json.dumps(result),
+                'headers': {
+                    'Access-Control-Allow-Origin': '*'
+                }
             }
         else:
             logger.error("Bad response from query: {}".format(json.dumps(queryResp)))
@@ -112,7 +122,9 @@ def handler(event, context):
             return {'statusCode': 500, 'body': 'Internal error storing quote.  Please try again.'}
         
         print('Success!')
-        return {'statusCode': 200, 'body': json.dumps(quote)}
+        return {'statusCode': 200, 'body': json.dumps(quote),'headers': {
+                'Access-Control-Allow-Origin': '*'
+            }}
     else:
         return {
             'body': "Invalid HTTP verb: {}".format(httpMethod),
