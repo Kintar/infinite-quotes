@@ -14,7 +14,8 @@ import quotesTheme from './quotesTheme';
 
 class App extends Component {
 	state = {
-		alertOpen: false
+		alertOpen: false,
+		authorized: false
 	};
 
 	openAlertDialog = () => {
@@ -26,11 +27,15 @@ class App extends Component {
 	}
 
 	render() {
+		const { auth } = this.state;
+
 		return (
 			<MuiThemeProvider theme={quotesTheme}>
-				<QuotesAppBar />
+				<QuotesAppBar auth={this.state.auth} />
 				<QuotesPanel />
+				{auth && (
 				<AddQuote onClick={this.openAlertDialog} />
+				)}
 				<Dialog open={this.state.alertOpen}>
 					<DialogTitle>Coming Soon!</DialogTitle>
 					<DialogContent>
